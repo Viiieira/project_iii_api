@@ -49,3 +49,42 @@ export const create = async (req, res) => {
 		return res.status(500).json({ message: 'Error creating Producer.' });
 	}
 };
+
+// Update Producer by ID
+export const update = async (req, res) => {
+	try {
+		const id = req.params.idUpdate;
+		const { productionCapacity } = req.body;
+
+		// See if this ID exists
+		const producer = await ProducerModel.findByPk(id);
+		if (!producer) {
+			return res.status(404).json({ message: 'No Producer was found.' });
+		}
+
+		await producer.update({ productionCapacity });
+
+		return res.json(producer);
+	} catch (error) {
+		return res.status(500).json({ message: 'Error updating Producer.' });
+	}
+};
+
+export const deleteProducer = async (req, res) => {
+	try {
+		const id = req.params.idDelete;
+
+		// See if this ID exists
+		const producer = await ProducerModel.findByPk(id);
+		if (!producer) {
+			return res.status(404).json({ message: 'No Producer was found.' });
+		}
+
+		await producer.destroy();
+
+		return res.json({ message: 'Producer was deleted successfully.' });
+	} catch (error) {
+		return res.status(500).json({ message: 'Error deleting Producer.' });
+	}
+	// return res.json({ api: 'deleteProducer', message: 'Producer was deleted.' });
+};
