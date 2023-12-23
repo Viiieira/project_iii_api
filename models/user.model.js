@@ -10,12 +10,12 @@ const UserModel = database.define('user', {
 		autoIncrement: true,
 		primaryKey: true,
 	},
-	email: {
+	username: {
 		type: STRING,
 		allowNull: false,
 		unique: true,
 	},
-	username: {
+	email: {
 		type: STRING,
 		allowNull: false,
 		unique: true,
