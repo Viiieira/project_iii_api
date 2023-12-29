@@ -1,16 +1,15 @@
 import { INTEGER, STRING } from 'sequelize';
 import { database } from '../config/context/database.js';
 
-const TodoModel = database.define('todo', {
+const UserRoleModel = database.define('userrole', {
 	id: {
 		type: INTEGER,
-		autoIncrement: true,
 		primaryKey: true,
 	},
-	todoText: {
+	name: {
 		type: STRING,
 		allowNull: false,
-		unique: true,
 	},
 });
-export { TodoModel };
+
+export { UserRoleModel };

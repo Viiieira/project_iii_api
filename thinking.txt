@@ -1,0 +1,44 @@
+Users:
+	id (Primary Key)
+	username
+	email
+	password
+	address
+	phone
+	enabled
+
+Energy:
+    id (Primary Key)
+    name
+    unit (kwt, ...)
+
+UserEnergy:
+    userID (Foreign Key referencing Users)
+    energyID (Foreign Key referencing Energy)
+    type 
+
+Listing:
+    id (Primary Key)
+    producerID (Foreign Key referencing producers)
+    energyID (Foreign Key referencing energyTypes)
+    startDt
+    endDt
+    capacity
+    pricePerUnit
+    status
+
+Transaction:
+    id(Primary Key)
+    listingID (Foreign Key referencing listings)
+    consumerID (Foreign Key referencing consumers)
+    amount
+    totalPrice
+    status
+
+Payment:
+    id (Primary Key)
+    transactionID (Foreign Key referencing Transaction)
+    amount
+    paymentDt
+    method
+    status

@@ -15,9 +15,8 @@ export const login = async (req, res) => {
 		return res.status(401).json({ message: 'Wrong credentials' }); // 401 = unauthorized
 	}
 	const token = createToken({
-		xpto: user.id,
+		id: user.id,
 		username: user.username,
-		batatas: 2,
 		role: user.role,
 	}); // este payload, é o que futuramente vai estar dentro do req.user
 
@@ -27,7 +26,7 @@ export const login = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-	const { username, email, password, role, address, phone } = req.body;
+	const { roleID, username, email, password, address, phone } = req.body;
 
 	const usernameExists = await UserModel.findOne({
 		where: {
@@ -47,21 +46,30 @@ export const register = async (req, res) => {
 		return res.status(500).json({ message: 'email already exists' });
 	}
 
-	// const { password: asujkhgbv, ...newUser } = await UserModel.create({
-	// 	username: username,
-	// 	password,
-	// });
-
-	// return res.json(newUser);
-
 	const user = await UserModel.create({
+		roleID,
 		username,
 		email,
 		password,
-		role,
 		address,
 		phone,
 	});
 
 	return res.json(user);
+};
+
+export const deactivate = async (req, res) => {
+	const { id } = req.params;
+
+	const updatedUser = await UserModel.update({ enabled: 0 }, { where: { id } });
+
+	if (updatedUser[0] === 1) {
+		return res.json({
+			message: 'User was deactivated successfully.',
+		});
+	} else {
+		return res.status(500).json({
+			message: 'User not found or enabled field not updated',
+		});
+	}
 };

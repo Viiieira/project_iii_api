@@ -1,8 +1,6 @@
-import { INTEGER, STRING } from 'sequelize';
+import { BOOLEAN, INTEGER, STRING, Sequelize } from 'sequelize';
 import { database } from '../config/context/database.js';
-
-// users:
-// Attributes: id (Primary Key), username, email, password, role, address, phone
+import { UserRoleModel } from './user_role.model.js';
 
 const UserModel = database.define('user', {
 	id: {
@@ -10,23 +8,28 @@ const UserModel = database.define('user', {
 		autoIncrement: true,
 		primaryKey: true,
 	},
+	roleID: {
+		type: INTEGER,
+		allowNull: false,
+		references: {
+			model: 'userroles',
+			key: 'id',
+			deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+		},
+	},
 	username: {
 		type: STRING,
 		allowNull: false,
-		unique: true,
+		unique: 'unique_username',
 	},
 	email: {
 		type: STRING,
 		allowNull: false,
-		unique: true,
+		unique: 'unique_email',
 	},
 	password: {
 		type: STRING,
 		allowNull: false,
-	},
-	role: {
-		type: STRING,
-		allowNull: true,
 	},
 	address: {
 		type: STRING,
@@ -36,7 +39,14 @@ const UserModel = database.define('user', {
 		type: STRING,
 		allowNull: true,
 	},
+	enabled: {
+		type: BOOLEAN,
+		allowNull: true,
+		defaultValue: true,
+	},
 });
+
+UserModel.belongsTo(UserRoleModel, { foreignKey: 'roleID', targetKey: 'id' });
 
 // const B = sequelize.define('B', /* ... */);
 

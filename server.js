@@ -8,6 +8,8 @@ import morgan from 'morgan';
 import { database } from './config/context/database.js';
 import { routes } from './routes/index.js';
 
+// SEED DATA
+
 //--REST SERVER--//
 const server = express();
 
@@ -32,7 +34,7 @@ server.use('/api', routes);
 //Fazer ligação à Base de Dados
 // npm install --save mysql2
 try {
-	database.sync({ force: false, alter: false });
+	database.sync({ force: false, alter: true });
 } catch (error) {
 	console.info(error);
 }
