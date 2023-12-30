@@ -1,4 +1,4 @@
-import { BOOLEAN, INTEGER, STRING, Sequelize } from 'sequelize';
+import { BOOLEAN, INTEGER, STRING } from 'sequelize';
 import { database } from '../config/context/database.js';
 import { UserRoleModel } from './user_role.model.js';
 
@@ -13,21 +13,14 @@ const UserModel = database.define(
 		roleID: {
 			type: INTEGER,
 			allowNull: false,
-			references: {
-				model: 'UserRole',
-				key: 'id',
-				deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
-			},
 		},
 		username: {
 			type: STRING,
 			allowNull: false,
-			unique: 'unique_username',
 		},
 		email: {
 			type: STRING,
 			allowNull: false,
-			unique: 'unique_email',
 		},
 		password: {
 			type: STRING,
@@ -52,6 +45,6 @@ const UserModel = database.define(
 	}
 );
 
-UserModel.belongsTo(UserRoleModel, { foreignKey: 'roleID' });
+UserRoleModel.hasMany(UserModel, { foreignKey: 'roleID' });
 
 export { UserModel };
