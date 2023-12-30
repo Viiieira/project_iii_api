@@ -26,11 +26,9 @@ Listing:
     id (Primary Key)
     producerID (Foreign Key referencing producers)
     energyID (Foreign Key referencing energyTypes)
-    startDt
-    endDt
     capacity
     pricePerUnit
-    status
+    enabled
 
 Transaction:
     id(Primary Key)
