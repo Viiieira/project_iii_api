@@ -6,15 +6,17 @@ import Sequelize from 'sequelize';
 // GRANT ALL PRIVILEGES ON *.* TO 'projeto3'@'%' WITH GRANT OPTION;
 // FLUSH PRIVILEGES;
 
+// docker run -d --name mysql_project_iii -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_USER=vieira -e MYSQL_PASSWORD=1234 -e MYSQL_DATABASE=project_iii_db -p 3306:3306 mysql
+
 // Load environment variables from .env file
 dotenv.config();
 
 const database = new Sequelize({
-	host: process.env.DB_HOST || 'node_db',
-	port: process.env.DB_PORT || 3306,
-	username: process.env.DB_USERNAME || 'vieira',
-	password: process.env.DB_PASSWORD || '12345',
-	database: process.env.DB_NAME || 'projeto3',
+	host: process.env.MYSQL_HOST,
+	port: process.env.MYSQL_PORT,
+	username: process.env.MYSQL_USERNAME,
+	password: process.env.MYSQL_PASSWORD,
+	database: process.env.MYSQL_NAME,
 	dialect: 'mysql',
 });
 

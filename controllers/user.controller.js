@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { UserModel } from '../models/user.model.js';
 import { createToken } from '../utils/jwt.js';
 
@@ -7,13 +8,25 @@ export const login = async (req, res) => {
 	const user = await UserModel.findOne({
 		where: {
 			email,
-			password,
 		},
 	});
 
 	if (!user) {
-		return res.status(401).json({ message: 'Wrong credentials' }); // 401 = unauthorized
+		return res.status(401).json({
+			api: 'login',
+			message: 'Wrong credentials',
+		});
 	}
+
+	const passwordMatch = await bcrypt.compare(password, user.password);
+
+	if (!passwordMatch) {
+		return res.status(401).json({
+			api: 'login',
+			message: 'Wrong credentials',
+		});
+	}
+
 	const token = createToken({
 		id: user.id,
 		username: user.username,
@@ -21,6 +34,7 @@ export const login = async (req, res) => {
 	}); // este payload, é o que futuramente vai estar dentro do req.user
 
 	return res.json({
+		api: 'login',
 		token: `Bearer ${token}`,
 	});
 };
@@ -34,7 +48,10 @@ export const register = async (req, res) => {
 		},
 	});
 	if (usernameExists) {
-		return res.status(500).json({ message: 'username already exists' });
+		return res.status(500).json({
+			api: 'register',
+			message: 'Username already exists',
+		});
 	}
 
 	const emailExists = await UserModel.findOne({
@@ -43,25 +60,34 @@ export const register = async (req, res) => {
 		},
 	});
 	if (emailExists) {
-		return res.status(500).json({ message: 'email already exists' });
+		return res.status(500).json({
+			api: 'register',
+			message: 'This email is already taken',
+		});
 	}
+
+	const saltRounds = 10;
+	const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 	const user = await UserModel.create({
 		roleID,
 		username,
 		email,
-		password,
+		password: hashedPassword,
 		address,
 		phone,
 	});
 
-	return res.json(user);
+	return res.json({ api: 'register', user });
 };
 
 export const deactivate = async (req, res) => {
 	const { id } = req.params;
 
-	const updatedUser = await UserModel.update({ enabled: 0 }, { where: { id } });
+	const updatedUser = await UserModel.update(
+		{ enabled: 0 },
+		{ where: { id } }
+	);
 
 	if (updatedUser[0] === 1) {
 		return res.json({

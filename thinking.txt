@@ -1,5 +1,10 @@
-Users:
+UserRole:
+    id (Primary Key)
+    name
+
+User:
 	id (Primary Key)
+    roleID (Foreign Key referencing UserRole)
 	username
 	email
 	password
