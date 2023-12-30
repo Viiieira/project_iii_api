@@ -54,7 +54,7 @@ export const updateUserRole = async (req, res) => {
 		if (!userRole) {
 			return res.status(404).json({
 				api: 'updateUserRole',
-				error: "This id doesn't exist",
+				error: "This ID doesn't exist",
 			});
 		}
 

@@ -14,7 +14,7 @@ export const login = async (req, res) => {
 	if (!user) {
 		return res.status(401).json({
 			api: 'login',
-			message: 'Wrong credentials',
+			error: 'Wrong credentials',
 		});
 	}
 
@@ -23,7 +23,7 @@ export const login = async (req, res) => {
 	if (!passwordMatch) {
 		return res.status(401).json({
 			api: 'login',
-			message: 'Wrong credentials',
+			error: 'Wrong credentials',
 		});
 	}
 
@@ -82,20 +82,50 @@ export const register = async (req, res) => {
 };
 
 export const deactivate = async (req, res) => {
-	const { id } = req.params;
+	try {
+		const { id } = req.params;
 
-	const updatedUser = await UserModel.update(
-		{ enabled: 0 },
-		{ where: { id } }
-	);
+		// See if the ID exists
+		const user = await UserModel.findByPk(id);
+		if (!user) {
+			return res.status(404).json({
+				api: 'deactivate',
+				error: "This ID doesn't exist",
+			});
+		}
 
-	if (updatedUser[0] === 1) {
+		user.enabled = false;
+		await user.save();
+
 		return res.json({
-			message: 'User was deactivated successfully.',
+			api: 'deactivate',
+			user,
 		});
-	} else {
+	} catch (error) {
 		return res.status(500).json({
-			message: 'User not found or enabled field not updated',
+			api: 'deactivate',
+			error: 'Server Internal Error',
 		});
 	}
+};
+
+export const activate = async (req, res) => {
+	const { id } = req.params;
+
+	// See if the ID exists
+	const user = await UserModel.findByPk(id);
+	if (!user) {
+		return res.status(404).json({
+			api: 'activate',
+			error: "This ID doesn't exist",
+		});
+	}
+
+	user.enabled = true;
+	await user.save();
+
+	return res.json({
+		api: 'activate',
+		user,
+	});
 };
