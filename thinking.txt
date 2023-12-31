@@ -41,6 +41,6 @@ Payment:
     id (Primary Key)
     transactionID (Foreign Key referencing Transaction)
     totalPrice
-    paymentDt
+    paymentDt // createdAt
     method
     status
