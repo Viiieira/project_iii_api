@@ -175,7 +175,7 @@ export const create = async (req, res) => {
 		});
 	}
 
-	if (amount < 0) {
+	if (amount <= 0 || amount > listingExists.amount) {
 		return res.status(500).json({
 			error: 'Insert a valid amount',
 		});
