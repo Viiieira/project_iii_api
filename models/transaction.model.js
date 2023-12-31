@@ -23,10 +23,6 @@ const TransactionModel = database.define(
 			type: FLOAT,
 			allowNull: false,
 		},
-		totalPrice: {
-			type: FLOAT,
-			allowNull: false,
-		},
 		enabled: {
 			type: BOOLEAN,
 			default: true,

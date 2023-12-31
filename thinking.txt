@@ -32,16 +32,15 @@ Listing:
 
 Transaction:
     id(Primary Key)
-    listingID (Foreign Key referencing listings)
-    consumerID (Foreign Key referencing consumers)
+    listingID (Foreign Key referencing ListingModel)
+    consumerID (Foreign Key referencing Consumers (UserModel))
     amount
-    totalPrice
-    status
+    enabled
 
 Payment:
     id (Primary Key)
     transactionID (Foreign Key referencing Transaction)
-    amount
+    totalPrice
     paymentDt
     method
     status

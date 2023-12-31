@@ -90,11 +90,14 @@ export const disable = async (req, res) => {
 
 export const update = async (req, res) => {
 	const { id } = req.params;
-	const { listingID, consumerID, amount, totalPrice } = req.body;
+	const { listingID, consumerID, amount } = req.body;
 
 	// See if the transaction exists
 	const transaction = await TransactionModel.findOne({
-		where: { id },
+		where: {
+			id,
+			enabled: true,
+		},
 	});
 	if (!transaction) {
 		return res.status(404).json({ error: 'No transaction was found.' });
@@ -118,6 +121,7 @@ export const update = async (req, res) => {
 		where: {
 			id: consumerID,
 			roleID: 3,
+			enabled: true,
 		},
 	});
 	if (!consumerExists) {
@@ -126,25 +130,25 @@ export const update = async (req, res) => {
 		});
 	}
 
-	if (amount < 0 || totalPrice < 0) {
+	// See if the amount is greater than 0
+	// or if it is greater than the capacity of the listing
+	if (amount <= 0 || amount > listingExists.amount) {
 		return res.status(500).json({
-			error: 'Inser valid amounts',
+			error: 'Insert a valid amount',
 		});
 	}
 
 	transaction.listingID = listingID;
 	transaction.consumerID = listingID;
 	transaction.amount = amount;
-	transaction.totalPrice = totalPrice;
 	transaction.save();
 
 	return res.json(transaction);
 };
 
 export const create = async (req, res) => {
-	const { listingID, consumerID, amount, totalPrice } = req.body;
+	const { listingID, consumerID, amount } = req.body;
 
-	// See if this Listing exists
 	// See if the Listing exists and its enabled
 	const listingExists = await ListingModel.findOne({
 		where: {
@@ -171,9 +175,9 @@ export const create = async (req, res) => {
 		});
 	}
 
-	if (amount < 0 || totalPrice < 0) {
+	if (amount < 0) {
 		return res.status(500).json({
-			error: 'Inser valid amounts',
+			error: 'Insert a valid amount',
 		});
 	}
 
@@ -181,7 +185,6 @@ export const create = async (req, res) => {
 		listingID,
 		consumerID,
 		amount,
-		totalPrice,
 		enabled: true,
 	});
 	return res.json(newTransaction);
