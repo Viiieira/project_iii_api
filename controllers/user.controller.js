@@ -78,7 +78,7 @@ export const register = async (req, res) => {
 		phone,
 	});
 
-	return res.json({ api: 'register', user });
+	return res.json(user);
 };
 
 export const deactivate = async (req, res) => {
@@ -128,4 +128,14 @@ export const activate = async (req, res) => {
 		api: 'activate',
 		user,
 	});
+};
+
+export const getAll = async (_req, res) => {
+	const users = await UserModel.findAll();
+
+	if (users.length == 0) {
+		return res.json({ message: 'No users were found.' });
+	}
+
+	return res.json(users);
 };

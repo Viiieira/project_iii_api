@@ -1,21 +1,21 @@
-import { database } from '../config/context/database.js';
-import { EnergyModel } from './energy.model.js';
 import { BOOLEAN, FLOAT, INTEGER } from 'sequelize';
+import { database } from '../config/context/database.js';
+import { ListingModel } from './listing.model.js';
 import { UserModel } from './user.model.js';
 
-const ListingModel = database.define(
-	'listing',
+const TransactionModel = database.define(
+	'transaction',
 	{
 		id: {
 			type: INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		producerID: {
+		listingID: {
 			type: INTEGER,
 			allowNull: false,
 		},
-		energyID: {
+		consumerID: {
 			type: INTEGER,
 			allowNull: false,
 		},
@@ -23,7 +23,7 @@ const ListingModel = database.define(
 			type: FLOAT,
 			allowNull: false,
 		},
-		pricePerUnit: {
+		totalPrice: {
 			type: FLOAT,
 			allowNull: false,
 		},
@@ -33,11 +33,11 @@ const ListingModel = database.define(
 		},
 	},
 	{
-		tableName: 'Listing',
+		tableName: 'Transaction',
 	}
 );
 
-UserModel.hasMany(ListingModel, { foreignKey: 'producerID' });
-EnergyModel.hasMany(ListingModel, { foreignKey: 'energyID' });
+ListingModel.hasMany(TransactionModel, { foreignKey: 'listingID' });
+UserModel.hasMany(TransactionModel, { foreignKey: 'consumerID' });
 
-export { ListingModel };
+export { TransactionModel };

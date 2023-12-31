@@ -65,7 +65,6 @@ export const getByEnergyId = async (req, res) => {
 export const create = async (req, res) => {
 	const { producerID, energyID, amount, pricePerUnit } = req.body;
 
-	console.log({ producerID, energyID, amount, pricePerUnit });
 	// See if the Producer exists
 	const producerExists = await UserModel.findOne({
 		where: {
@@ -103,6 +102,7 @@ export const create = async (req, res) => {
 		energyID,
 		amount,
 		pricePerUnit,
+		enabled: true,
 	});
 
 	return res.json(newListing);
@@ -190,22 +190,4 @@ export const disableListing = async (req, res) => {
 	listing.save();
 
 	return res.json(listing);
-};
-
-export const deleteListing = async (req, res) => {
-	const { id } = req.params;
-
-	// See if the listing exists
-	const listing = await ListingModel.findByPk(id);
-	if (!listing) {
-		return res.status(404).json({
-			error: 'No listing was found.',
-		});
-	}
-
-	await listing.destroy();
-
-	return res.json({
-		message: 'Listing was successfully deleted',
-	});
 };

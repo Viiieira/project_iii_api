@@ -98,7 +98,6 @@ export const deleteUserRole = async (req, res) => {
 				error: "This user role doesn't exist",
 			});
 		}
-		console.log('ID: ', id);
 
 		await role.destroy();
 

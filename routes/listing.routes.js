@@ -1,7 +1,6 @@
 import Router from 'express';
 import {
 	create,
-	deleteListing,
 	disableListing,
 	enableListing,
 	getAll,
@@ -21,6 +20,5 @@ listingRoutes.post('/create', create);
 listingRoutes.put('/update/:id', update);
 listingRoutes.put('/enable/:id', enableListing);
 listingRoutes.put('/disable/:id', disableListing);
-listingRoutes.delete('/delete/:id', deleteListing);
 
 export { listingRoutes };
