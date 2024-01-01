@@ -74,4 +74,4 @@ export const enable = async (req, res) => {
 	return res.json(payment);
 };
 
-// TODO: Test all the endpoints for the PaymentModel
+// TODO: Test all the endpoints for the Payment
