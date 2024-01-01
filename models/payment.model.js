@@ -1,5 +1,5 @@
-import { INTEGER, STRING } from 'sequelize';
-import { database } from '../config/context/database';
+import { BOOLEAN, FLOAT, INTEGER, STRING } from 'sequelize';
+import { database } from '../config/context/database.js';
 import { TransactionModel } from './transaction.model.js';
 
 const PaymentModel = database.define(

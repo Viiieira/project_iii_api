@@ -5,7 +5,7 @@ import {
 	getAll,
 	getById,
 	getByTransactionId,
-} from '../controllers/user.controller.js';
+} from '../controllers/payment.controller.js';
 
 //--ROUTES--//
 const paymentRoutes = Router();

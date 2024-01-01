@@ -1,4 +1,4 @@
-import { PaymentModel } from '../models/payment.model';
+import { PaymentModel } from '../models/payment.model.js';
 
 export const getAll = async (_req, res) => {
 	const payments = await PaymentModel.findAll();
